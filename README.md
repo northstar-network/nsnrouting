@@ -28,7 +28,7 @@ make start
 ## Generate the dashboard password hash
 
 ```bash
-docker run --rm httpd:alpine htpasswd -nB admin
+docker run --rm httpd:alpine htpasswd -n admin
 ```
 
 Copy the output into `.env`, replacing each `$` with `$$`.
