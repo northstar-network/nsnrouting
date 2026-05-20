@@ -1,0 +1,11 @@
+services:
+  traefik:
+    ports:
+      - "80:80"
+      - "8080:8080"
+    command:
+      - "--api.dashboard=${TRAEFIK_DASHBOARD:-false}"
+      - "--api.insecure=${TRAEFIK_DASHBOARD:-false}"
+    volumes:
+      - ./traefik/traefik.local.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic:/etc/traefik/dynamic:ro
