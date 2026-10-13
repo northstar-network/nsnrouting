@@ -68,6 +68,31 @@ networks:
 
 For local, use `entrypoints=web` and omit the `tls` labels.
 
+### Exposing a Postgres database (prod)
+
+The `postgres` entrypoint (`:25432`) routes databases by hostname (Postgres
+STARTTLS + SNI, terminated with the `*.easydeploy.tech` certificate). The DNS
+record must be DNS-only (grey cloud): Cloudflare's proxy only carries HTTP.
+
+```yaml
+services:
+  postgres:
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.tcp.routers.myapp-db.rule=HostSNI(`db-myapp.easydeploy.tech`)"
+      - "traefik.tcp.routers.myapp-db.entrypoints=postgres"
+      - "traefik.tcp.routers.myapp-db.tls=true"
+      - "traefik.tcp.routers.myapp-db.tls.certresolver=cloudflare"
+      - "traefik.tcp.services.myapp-db.loadbalancer.server.port=5432"
+```
+
+Clients: host `db-myapp.easydeploy.tech`, port `25432`, SSL required. Inside
+the project, reach the database through a network alias that only exists on
+its internal network: on `proxy`, a service called `postgres` can resolve to
+another project's database.
+
 ## First-time prod setup
 
 1. `make setup` — creates `.env` from `.env.example` and `certs/acme.json` with `chmod 600`

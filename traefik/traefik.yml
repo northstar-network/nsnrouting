@@ -31,6 +31,11 @@ entryPoints:
           - main: "easydeploy.tech"
             sans:
               - "*.easydeploy.tech"
+  # Databases (Postgres STARTTLS). One port for every database on the host:
+  # each project declares a TCP router with HostSNI(`db-<project>.easydeploy.tech`)
+  # and tls=true, and clients connect with SSL on so Traefik can read the name.
+  postgres:
+    address: ":25432"
 
 certificatesResolvers:
   cloudflare:
