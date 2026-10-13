@@ -3,6 +3,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "25432:25432"   # postgres entrypoint — databases routed by hostname
     environment:
       CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
     volumes:
